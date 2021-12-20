@@ -5,17 +5,31 @@
 //         const data = await response.json()
 //         displaySong(data.data)
 // };
-const searchSong =  () => {
+
+
+//enter button click functionality add 
+var searchBtn = document.getElementById("search-btn");
+var searchField = document.getElementById("search-field");
+searchField.addEventListener("keypress", function(event) {
+    // event.preventDefault();
+    // console.log(event.keyCode)
+    if (event.key == 'Enter'){
+        searchBtn.click();
+    }
+   
+});
+
+const searchSong = () => {
     const searchFiled = document.getElementById("search-field").value;
+    toggleSpinner()
     const url = `https://api.lyrics.ovh/suggest/${searchFiled}`;
     fetch(url)
-       .then((response)=>response.json())
-        .then((data)=>displaySong(data.data))
-        .catch((error)=> console.log(error))
+        .then((response) => response.json())
+        .then((data) => displaySong(data.data))
+        .catch((error) => console.log(error))
 };
-
 const displaySong = (lyrics) => {
-    console.log(lyrics)
+    // console.log(lyrics)
     document.getElementById("search-field").value = ""
     const songContainer = document.getElementById("song-container");
     songContainer.innerHTML = "";
@@ -35,22 +49,21 @@ const displaySong = (lyrics) => {
        </div>
        `;
         songContainer.appendChild(songDiv);
+        toggleSpinner()
     })
 };
-
-const getLyric = async(artist, title) => {
-   try{
-    const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
-    const response =await fetch(url)
-        const data =await response.json()
+const getLyric = async (artist, title) => {
+    toggleSpinner()
+    try {
+        const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
+        const response = await fetch(url)
+        const data = await response.json()
         displayLyric(data.lyrics)
-   }
-   catch(error){
-    console.log("catch manual error")
-   }
+    }
+    catch (error) {
+        console.log("catch this error")
+    }
 };
-
-
 // const getLyric = (artist, title) => {
 //     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
 //     fetch(url)
@@ -64,7 +77,25 @@ const getLyric = async(artist, title) => {
 const displayLyric = (lyric) => {
     const lyrics = document.getElementById("lyric");
     lyrics.innerText = lyric;
+    toggleSpinner()
+};
+
+const toggleSpinner = () => { //show and show==true are the same condition
+    const spinner = document.getElementById("spinner")
+    const song = document.getElementById("song-container")
+    const lyric = document.getElementById("lyric")
+    // if(show){
+    //     spinner.classList.remove('d-none')
+    // } else{
+    //     spinner.classList.add('d-none')
+    // }
+
+    //another way of toggle then function parameter and argument is not required
+    spinner.classList.toggle('d-none')
+    song.classList.toggle('d-none')
+    lyric.classList.toggle('d-none')
+    
+
 }
-// const displayError = (err)=>{
-//     document.getElementById("error").innerText = err;
-// }
+
+
